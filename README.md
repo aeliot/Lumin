@@ -10,3 +10,4 @@ To-do:
 - [ ] Raspberry Pi library for controlling the Arduino.
 - [ ] Interfaces for Pi: web, iOS, Android, anything else that tickles my fancy.
 - [ ] Capacitive touch wheel for Arduino to control master brightness.
+
