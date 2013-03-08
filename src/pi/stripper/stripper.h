@@ -2,18 +2,23 @@
 #define __stripper__
 
 #include "../arduPi/arduPi.h"
+#include <queue.h>
 
 class Strip {
  public:
-  
+  Strip::Strip(int);
+  void send(Signal);
+  void stackUp(Signal);
+  void sendStack();
  private:
-
+  int length;
+  queue<Signal> stack;
 }
 
 class Color {
  public:
-  Color Color();
-  Color Color(unsigned char, unsigned char, unsigned char);
+  Color::Color();
+  Color::Color(unsigned char, unsigned char, unsigned char);
   unsigned char red;
   unsigned char green;
   unsigned char blue;
@@ -21,7 +26,7 @@ class Color {
 
 class Signal {
  public:
-
+  
   typedef enum {
     CLEAR = 0x00,
     PUSH = 0x01,
@@ -34,6 +39,7 @@ class Signal {
   }OpCode;
 
   void setOp(OpCode);
+  void setColor(Color);
   void clear();
   void push(Color);
   void cue(Color);
@@ -45,7 +51,6 @@ class Signal {
   void stopCycle();
   void stopFade();
   void stopPulse();
- privat:
   unsigned char sig[4];
 }
 
