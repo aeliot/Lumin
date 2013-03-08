@@ -4,8 +4,8 @@ Cue	0x02RRGGBB	Cue a new pixel to come in on cycle
 Bright	0x030000BB	Set global brightness
 Solid	0x04RRGGBB	Set entire thing to solid color
 Cycle	0x10TTTTTT	Cycle through, looping end to end
-      0x20000000  Stop
+	0x20000000	Stop
 Fade	0x11TTTTTT	Fade everything out, brightness over time
-      0x21000000  Stop
+	0x21000000	Stop
 Pulse	0x12TTTTTT	Pulse in and out
-      0x22000000  Stop
+	0x22000000	Stop

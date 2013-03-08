@@ -1,0 +1,28 @@
+********************
+* ARDUPI CHANGELOG *
+********************
+
+
+v1.4
+--------------------
+- Unified library for rev1 and rev2.
+- Added include guards.
+- No need to instantiate SPIPi, WirePi and SerialPi classes.
+
+v1.3
+--------------------
+- Support for real interuptions on any digital pin.
+
+v1.2
+--------------------
+- MISO, MOSI, CS and CLK pins can be used as GPIO pins. Using this names as pin
+  identifier or using numbers. For example this instructions are the same:
+  pinMode(11,OUTPUT);
+  pinMode(MOSI,OUTPUT);
+
+
+v1.1
+--------------------
+- Fixed serial communication problem. On previous versions Serial.read returned 
+  a value of 0 if there was nothing to be read after a certain amount of time.
+- Added analogRead function.
