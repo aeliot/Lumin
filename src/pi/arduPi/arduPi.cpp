@@ -22,6 +22,30 @@
 
 #include "arduPi.h"
 
+#include <errno.h>
+#include <fcntl.h>
+#include <netinet/in.h>
+#include <signal.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <sys/ipc.h>
+#include <sys/sem.h>
+#include <sys/socket.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <sys/mman.h>
+#include <string.h>
+#include <time.h>
+#include <termios.h>
+#include <ctype.h>
+#include <sys/ioctl.h>
+#include <limits.h>
+#include <algorithm>
+#include <limits.h>
+#include <pthread.h>
+#include <poll.h>
+
 struct bcm2835_peripheral {
     unsigned long addr_p;
     int mem_fd;
@@ -40,7 +64,7 @@ struct bcm2835_peripheral bsc_rev2 = {IOBASE + 0X804000};
 struct bcm2835_peripheral bsc0;
 
 void *spi0 = MAP_FAILED;
-static  uint8_t *spi0Mem = NULL;
+static  uint32_t *spi0Mem = NULL;
 
 pthread_t idThread2;
 pthread_t idThread3;
@@ -599,6 +623,7 @@ void WirePi::write(const char *data){
 		BSC0_DLEN = length;
 		for(int i=0;i<length;i++){
 			BSC0_FIFO = data[i];
+            this->length = length;
 		}
 		BSC0_S = CLEAR_STATUS;
 		BSC0_C = START_WRITE;  
@@ -611,6 +636,7 @@ void WirePi::write(const char *data){
 			for(int j=0;j<16;j++){
 				BSC0_FIFO = data[i*16+j];
 			}
+
 			BSC0_S = CLEAR_STATUS;
 			BSC0_C = START_WRITE;  
 			wait_i2c_done();
@@ -619,6 +645,7 @@ void WirePi::write(const char *data){
             BSC0_DLEN = residual;
 			BSC0_FIFO = data[times*16+i];
 		}
+        this->length = (times*16) + residual;
 		BSC0_S = CLEAR_STATUS;
 		BSC0_C = START_WRITE;  
 		
@@ -636,6 +663,7 @@ void WirePi::write(unsigned char*data,int length){
 		for(int i=0;i<length;i++){
 			BSC0_FIFO = data[i];
 		}
+        this->length = length;
 		BSC0_S = CLEAR_STATUS;
 		BSC0_C = START_WRITE;  
 		
@@ -654,7 +682,8 @@ void WirePi::write(unsigned char*data,int length){
 		for(int i=0;i<residual;i++){
             BSC0_DLEN = residual;
 			BSC0_FIFO = data[times*16+i];
-		}
+        }
+        this->length = (times*16) + residual;
 		BSC0_S = CLEAR_STATUS;
 		BSC0_C = START_WRITE;  
 		
@@ -684,6 +713,10 @@ void WirePi::requestFrom(unsigned char address,int quantity){
 //Reads a byte that was transmitted from a slave device to a master after a call to WirePi::requestFrom()
 unsigned char WirePi::read(){
 	return BSC0_FIFO;
+}
+
+int WirePi::available(){
+    return this->length;
 }
 
 
@@ -753,20 +786,20 @@ void WirePi::wait_i2c_done() {
 	 
 	REV = getBoardRev();
 
-    uint8_t *mapaddr;
+    uint32_t *mapaddr;
 
-    if ((spi0Mem = (uint8_t*)malloc(BLOCK_SIZE + (PAGESIZE - 1))) == NULL){
+    if ((mapaddr = (uint32_t*)malloc(BLOCK_SIZE + (PAGESIZE - 1))) == NULL){
         fprintf(stderr, "bcm2835_init: spi0Mem malloc failed: %s\n", strerror(errno));
         exit(1);
     }
     
-    mapaddr = spi0Mem;
-    if (((uint32_t)mapaddr % PAGESIZE) != 0)
+    //mapaddr = spi0Mem;
+    if (((u_int32_t)mapaddr % (u_int32_t)PAGESIZE) != 0)
         mapaddr += PAGESIZE - ((uint32_t)mapaddr % PAGESIZE) ;
     
     spi0 = (uint32_t *)mmap(mapaddr, BLOCK_SIZE, PROT_READ|PROT_WRITE, MAP_SHARED|MAP_FIXED, gpio.mem_fd, BCM2835_SPI0_BASE) ;
     
-    if ((int32_t)spi0 < 0){
+    if (spi0 < 0){
         fprintf(stderr, "bcm2835_init: mmap failed (spi0): %s\n", strerror(errno)) ;
         exit(1);
     }

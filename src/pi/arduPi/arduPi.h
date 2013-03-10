@@ -320,6 +320,7 @@ class WirePi{
 		int map_peripheral(struct bcm2835_peripheral *p);
 		void unmap_peripheral(struct bcm2835_peripheral *p);
 		void wait_i2c_done();
+        int length;
 	public:
 		WirePi();
 		void begin();
@@ -330,6 +331,7 @@ class WirePi{
 		void endTransmission();
 		void requestFrom(unsigned char address,int quantity);
 		unsigned char read();
+        int available();
 };
 
 class SPIPi{

@@ -7,7 +7,7 @@ Strip::Strip(int size){
   //setup the pi interface
   Serial.begin(9600);
 
-  this.length = size;
+  this->length = size;
 }
 
 void Strip::send(Signal signal){
@@ -17,12 +17,13 @@ void Strip::send(Signal signal){
 }
 
 void Strip::stackUp(Signal signal){
-  this.stack.push(signal);
+  this->stack.push(signal);
 }
 
 void Strip::sendStack(){
-  while(!this.stack.empty()){
-    send(this.stack.pop());
+  while(!this->stack.empty()){
+      send(this->stack.front());
+    this->stack.pop();
   }
 }
 
@@ -38,8 +39,8 @@ Color::Color(unsigned char r, unsigned char g, unsigned char b){
   blue = g;
 }
 
-void Signal::setOp(OpCode){
-  sig[0] = OpCode;
+void Signal::setOp(OpCode op){
+  sig[0] = op;
 }
 
 void Signal::setColor(Color color){
