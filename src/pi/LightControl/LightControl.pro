@@ -18,3 +18,21 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h
 
 FORMS    += mainwindow.ui
+
+HEADERS += \
+    ../arduPi/arduPi.h
+
+SOURCES += \
+    ../arduPi/arduPi.cpp
+
+HEADERS += \
+    ../MPR121/mpr121.h
+
+SOURCES += \
+    ../MPR121/mpr121.cpp
+
+HEADERS += \
+    ../stripper/stripper.h
+
+SOURCES += \
+    ../stripper/stripper.cpp
