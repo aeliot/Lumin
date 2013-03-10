@@ -43,7 +43,3 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_dialMaster_valueChanged(int value)
-{
-
-}
