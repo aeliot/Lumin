@@ -1,11 +1,16 @@
 Clear	0x00000000	Clear all pixals
-Push	0x01RRGGBB	push a new pixel, bumps all other colors up pixel
-Cue	0x02RRGGBB	Cue a new pixel to come in on cycle
-Bright	0x030000BB	Set global brightness
-Solid	0x04RRGGBB	Set entire thing to solid color
-Cycle	0x10TTTTTT	Cycle through, looping end to end
-	0x20000000	Stop
-Fade	0x11TTTTTT	Fade everything out, brightness over time
-	0x21000000	Stop
-Pulse	0x12TTTTTT	Pulse in and out
-	0x22000000	Stop
+Push	0x01GGRRBB	push a new pixel, bumps all other colors up pixel
+Cue	0x02GGRRBB	Cue a new pixel to come in on cycle
+Solid	0x03GGRRBB	Set entire thing to solid color
+
+Bright	0x100000BB	Set global brightness
+
+Cycle	0x21TTTTTT	Cycle through, looping end to end
+	0x31000000	Stop
+Fade	0x22TTTTTT	Fade everything out, brightness over time
+	0x32000000	Stop
+Pulse	0x23TTTTTT	Pulse in and out
+	0x33000000	Stop
+
+Show
+push	0x40000000	Show a push

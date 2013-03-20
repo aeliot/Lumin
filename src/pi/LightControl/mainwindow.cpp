@@ -8,9 +8,6 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     CapaTouch.begin();
-    while(true){
-        dial();
-    }
 }
 
 
@@ -37,6 +34,8 @@ void MainWindow::dial(){
         keyOld = key;
 
 }
+
+
 
 MainWindow::~MainWindow()
 {

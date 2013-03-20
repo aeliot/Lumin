@@ -36,3 +36,9 @@ HEADERS += \
 
 SOURCES += \
     ../stripper/stripper.cpp
+
+HEADERS += \
+    wheel.h
+
+SOURCES += \
+    wheel.cpp
